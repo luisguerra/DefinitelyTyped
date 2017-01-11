@@ -96,6 +96,7 @@ declare namespace Bookshelf {
 		count(column?: string, options?: SyncOptions): BlueBird<number>;
 		destroy(options?: DestroyOptions): BlueBird<T>;
 		fetch(options?: FetchOptions): BlueBird<T>;
+		fetchPage(options?: FetchPageOptions): BlueBird<Collection<T>>;
 		fetchAll(options?: FetchAllOptions): BlueBird<Collection<T>>;
 		hasMany<R extends Model<any>>(target: { new (...args: any[]): R }, foreignKey?: string): Collection<R>;
 		hasOne<R extends Model<any>>(target: { new (...args: any[]): R }, foreignKey?: string): R;
@@ -129,6 +130,8 @@ declare namespace Bookshelf {
 	abstract class CollectionBase<T extends Model<any>> extends Events<T> {
 		// See https://github.com/tgriesser/bookshelf/blob/0.9.4/src/base/collection.js#L573
 		length: number;
+        
+		pagination: any;
 
 		// See https://github.com/tgriesser/bookshelf/blob/0.9.4/src/base/collection.js#L21
 		constructor(models?: T[], options?: CollectionOptions<T>);
@@ -270,6 +273,11 @@ declare namespace Bookshelf {
 	interface FetchOptions extends SyncOptions {
 		require?: boolean;
 		columns?: string | string[];
+		withRelated?: (string | WithRelatedQuery)[];
+	}
+	interface FetchPageOptions extends SyncOptions {
+		page?: number;
+		pageSize?: number;
 		withRelated?: (string | WithRelatedQuery)[];
 	}
 
